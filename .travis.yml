@@ -6,7 +6,10 @@ python:
     - "2.7"
 before_install:
     - sudo apt-get update
+    - curl -L http://bootstrap.saltstack.org | sudo sh -s
 install:
+    - sudo salt-call --retcode-passthrough --local state.template vagrant/devmode/salt/roots/build_deps.sls
+    - sudo salt-call --retcode-passthrough --local state.template vagrant/devmode/salt/roots/postgres.sls
     - pip install -r requirements/2.7/minimal_requirements.txt
     - for m in rest-api minion-sim cthulhu calamari-web calamari-common ; do cd $m ; python setup.py develop ; cd .. ; done
     - cd dev ; python ./configure.py ; cd ..
